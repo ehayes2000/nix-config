@@ -84,7 +84,7 @@
   users.users.eric = {
     isNormalUser = true;
     description = "Eric";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" ];
     packages = with pkgs; [
     #  thunderbird
     ];
@@ -96,12 +96,10 @@
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
-  nix.settings.experimental-features = [ "nix-command" ];
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    docker
     git
     tmux
     wget
@@ -121,13 +119,15 @@
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
+  virtualisation.docker.enable = true;
+  
   services.openssh = {    
     enable = true;
-    ports = [ 22 ];
+    ports = [ 22 418 ];
     settings.PasswordAuthentication = false;
     settings.KbdInteractiveAuthentication = false;
     settings.PermitRootLogin = "no";
+    startWhenNeeded = false;
   };
 
 

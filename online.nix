@@ -27,6 +27,27 @@ in
   systemd.targets.poweroff.enable = false;
   systemd.targets.halt.enable = false;
 
+  networking.interfaces.enp5s0 = {
+    wakeOnLan.enable = true;
+  };
+ 
+  boot.extraModprobeConfig = "options usbcore autosuspend=-1";
+  boot.kernelParams = [
+    "intel_idle.max_cstate=0"
+    "amd_pstate=active"
+    "processor.max_cstate=1"
+    "idle=poll"
+  ];  
+
+  powerManagement = {
+    enable = true;
+    powertop.enable = false;
+    cpuFreqGovernor = "performance";
+  };
+ 
+  system.autoUpgrade.enable = false;
+
+
   systemd.timers.checkSshd = {
     description = "Run sshd checker";
     wantedBy = [ "timers.target" ];
